@@ -1,0 +1,15 @@
+#registerForm{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+
+    .input{
+        margin: 15px;
+        height: 20px;
+    }
+
+    .btn{
+        width: 100px;
+        margin: 15px;
+    }
+}
