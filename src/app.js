@@ -57,19 +57,15 @@ app.use('/api/sessions/', sessionsRouter);
 
 const messages = [];
 
-io.on('connection', (socket) => {
-    console.log('New client connected')
+io.on('connection', socket => {
+    console.log("Socket connected");
 
-    socket.on('msg', async(data) => {
-         console.log(data); 
-        await messageManager.addMessage(data)
-        const messages = await messageManager.getAllMessages()
-         messages.push(data); 
-        io.emit('uploadingMessages', messages)
+    socket.on('message', data => {
+        messages.push(data);
+        io.emit('messageLogs', messages);
     })
 
     socket.on('authenticated', data => {
-       socket.broadcast.emit('newUserConnected', data);
-     /* console.log('Server: ', data) */ 
+        socket.broadcast.emit('newUserConnected', data);
     })
 })

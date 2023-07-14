@@ -17,53 +17,45 @@ const socket = io();
 }) */
 
 let user;
-let chatInput = document.getElementById('chatbox')
-Swal.fire ({
-    title: 'Welcome to our store!',
-    input: 'text',
-    text: 'Write down your e-mail in order to ask questions',
+const chatbox = document.getElementById('chatbox');
+
+Swal.fire({
+    title: "Identifícate",
+    input: "text",
     inputValidator: (value) => {
-        return !value && 'Writing a user name is mandatory'
+        return !value && "¡Necesitas escribir un nombre de usuario para comenzar a chatear!"
     },
     allowOutsideClick: false
 }).then(result => {
     user = result.value;
-    socket.emit('authenticated', user);
+    socket.emit('authenticated', user)
 })
-
-chatInput.addEventListener('keyup', ev => {
-    if (ev.key === 'Enter') {
-        if (chatInput.value.trim().length > 0) {
-            const msgData = {user: user, message: chatInput.value}
-            socket.emit('msg', msgData);
-            chatInput.value = "";
+chatbox.addEventListener('keyup', evt => {
+    if (evt.key === "Enter") {
+        if (chatbox.value.trim().length > 0) {
+            socket.emit('message', { user: user, message: chatbox.value });
+            chatbox.value = "";
         }
     }
 })
 
-socket.on('uploadingMessages', data => {
-
-  
-
-    let log = document.getElementById('messagespot');
+socket.on('messageLogs', data => {
+    if (!user) return;
+    let log = document.getElementById('messageLogs');
     let messages = "";
-
     data.forEach(message => {
-        messages += `${message.user}: ${message.message}</br>`;
-    });
-
+        messages += `${message.user} dice: ${message.message}<br/>`
+    })
     log.innerHTML = messages;
-});
-
+})
 socket.on('newUserConnected', data => {
     if (!user) return;
-    console.log(data);
     Swal.fire({
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
-        title: `${data} joined the chat`,
-        icon: 'success'
+        title: `${data} se ha unido al chat`,
+        icon: "success"
     })
 })
