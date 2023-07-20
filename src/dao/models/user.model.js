@@ -5,28 +5,28 @@ const usersColl = 'users';
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true
+        required: false
     },
 
     lastName: {
         type: String,
-        required: true
+        required: false
     },
 
     email: {
         type: String,
-        required: true,
+        required: false,
         unique: true
     },
 
     age: {
         type: Number,
-        required: true
+        required: false
     },
 
     password: {
         type: String,
-        required: true
+        required: false
     },
 });
 

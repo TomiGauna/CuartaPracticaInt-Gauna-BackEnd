@@ -1,0 +1,19 @@
+h1{
+    margin-left: 15px;
+}
+
+#changePswdForm{
+    display: flex;
+    flex-direction: column;
+
+    .input{
+        margin: 15px;
+        height: 20px;
+        width: 500px;
+    }
+
+    .btn{
+        width: 150px;
+        margin: 15px;
+    }
+}

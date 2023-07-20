@@ -11,6 +11,8 @@ import MessageManager from "./dao/MongoManagers/MongoMsgManager.js";
 import { Server } from "socket.io";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 const hidden = 'Belalugosi21';
 
 const messageManager = new MessageManager();
@@ -49,6 +51,10 @@ app.use(session({
     saveUninitialized: true
 }));
 
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', viewsRouter);
 app.use('/api/products/', productsRouter); 
 app.use('/api/carts/', cartsRouter);
@@ -62,6 +68,7 @@ io.on('connection', socket => {
 
     socket.on('message', data => {
         messages.push(data);
+        messageManager.addMessage(data);
         io.emit('messageLogs', messages);
     })
 

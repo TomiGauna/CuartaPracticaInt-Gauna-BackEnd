@@ -57,7 +57,7 @@ router.get('/chat', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
-  res.render('login', { title: 'Log In', style: 'login.css' });
+    res.render('login', { title: 'Login', style: 'login.css' });
 })
 
 router.get('/register', (req, res) => {
@@ -65,7 +65,11 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/profile', (req, res) => {
-  res.render('profile', { user: req.session.user, title: 'Profile' });
+    res.render('profile', { user: req.session.user, title: 'Profile', style: 'profile.css' });
 });
+
+router.get('/changePassword', (req, res) => {
+    res.render('changePassword', { title: 'Password Restarting', style: 'changePswd.css' })
+})
 
 export default router

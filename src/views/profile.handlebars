@@ -1,12 +1,12 @@
 <h1>Profile</h1>
 <div>
     <h4>Personal data</h4>
-    <p>Name: {{user.firstName}} {{user.lastName}}</p>
+    <p>Name: {{user.name}}</p>
     <p>E-mail: {{user.email}}</p>
     <p>Age: {{user.age}}</p>
     {{#if user.userRole}}
     <div>
-        <p>Role Type: Admin ✅</p>
+        <p>Role Type: Admin✅</p>
     </div>
     {{else}}
     <div>
