@@ -1,9 +1,11 @@
 import { Router } from "express";
 import userModel from "../dao/models/user.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash } from "../utils.js";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 
 const router = Router();
+router.use(cookieParser());
 
 ///////////////////////////////////////////////////REGISTER
 router.post('/register', passport.authenticate('register', {failureRedirect: '/api/sessions/failedregister'}), async(req, res) => {
@@ -16,25 +18,30 @@ router.get('/failedregister', (req, res) => {
 
 
 ////////////////////////////////////////////////////LOGIN
-router.post('/login', passport.authenticate('login', { failureRedirect: '/api/sessions/failtologin'}), async (req, res) => {
+router.post('/login', passport.authenticate('login', { session: false, failureRedirect: '/api/sessions/failtologin'}), async (req, res) => {
     let user = req.user;
     if (!user) return res.status(400).send({ status: "error", error: "Check username or password" });
     
-    let role = false;
-    user.email.includes('admin') ? role = true : role;
+    /* user.email.includes('admin') ? role = true : role; */
 
-    req.session.user = {
+    /* req.session.user = {
         name: `${user.firstName} ${user.lastName}`,
         email: user.email,
         age: user.age,
         userRole: role,
-    }
-    res.send({ status: "success", payload: req.session.user, message: 'Correct login' });
+    } */
+    res.cookie('TomsCookie', req.user, { httpOnly: true }).status(200).send('Correct Cookie Setting');
 })
 
 router.get('/failtologin', (req, res) => {
     res.status(400).send({ status: "error", error: "Fail to login. Please check your data" });
 });
+
+/////////////////////////////////////////////////////"CURRENT" ROUTE
+router.get('/current', passport.authenticate('current', { session: false }), (req, res) => {
+    if(!req.user) res.status(404).send('The user you look for cannot be reached');
+    res.status(200).send(req.user.user);
+  })
 
 
 ////////////////////////////////////////////////////CHANGE PASSWORD

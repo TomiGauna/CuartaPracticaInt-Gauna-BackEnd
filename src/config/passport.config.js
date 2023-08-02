@@ -1,10 +1,15 @@
 import passport from "passport";
 import local from 'passport-local';
-import userService from '../dao/models/user.model.js';
+import userModel from '../dao/models/user.model.js';
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from 'passport-github2';
+import jwt from 'passport-jwt';
+import { PRIVATE_KEY, generateToken, authToken } from "../utils.js";
 
 const localStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
 const initializePassport = () => {
 
     passport.use('register', new localStrategy(
@@ -16,7 +21,7 @@ const initializePassport = () => {
             }
             
             try {
-                let user = await userService.findOne({ email: username });
+                let user = await userModel.findOne({ email: username });
                 if (user) return done(null, false);
 
                 const newUser = {
@@ -27,7 +32,7 @@ const initializePassport = () => {
                     password: createHash(password),
                 }
 
-                let outcome = await userService.create(newUser);
+                let outcome = await userModel.create(newUser);
                 return done(null, outcome);
 
             } catch (error) {
@@ -42,11 +47,12 @@ const initializePassport = () => {
         { usernameField: 'email' }, async (username, password, done) => {
 
         try {
-            const user = await userService.findOne({ email: username });
+            const user = await userModel.findOne({ email: username });
             if(!user) return done(null, false, { message: 'User does not exist' });
             if(!isValidPassword(user, password)) return done(null, false);
 
-            return done(null, user);
+            const jwt = generateToken(user)
+            return done(null, jwt);
 
         } catch (error) {
             return done({ error: 'Fail to login. Please check your email/password' })
@@ -62,7 +68,7 @@ const initializePassport = () => {
         try {
 
             /* console.log({ profile }) */
-            let user = await userService.findOne({ email: profile._json.email });
+            let user = await userModel.findOne({ email: profile._json.email });
             if (user) return done(null, user);
 
             const newUser = {
@@ -73,13 +79,26 @@ const initializePassport = () => {
                 password: '',
             }
 
-            user = await userService.create(newUser);
+            user = await userModel.create(newUser);
             return done(null, user);
 
         } catch (error) {
             return done(error.message);
         }
     }));
+
+
+    passport.use('current', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: PRIVATE_KEY
+    }, async (jwt_payload, done) => {
+        try {
+            return done(null, jwt_payload);
+        } catch (error) {
+            done(error);
+        }
+    }
+    ));
 
 
     passport.serializeUser((user, done) => {
@@ -89,12 +108,21 @@ const initializePassport = () => {
 
     passport.deserializeUser(async (_id, done) => {
         try {
-            const user = await userService.findOne({ _id });
+            const user = await userModel.findOne({ _id });
             return done(null, user);
         } catch {
             return done({ message: "Error deserializing user" });
         }
     });
 };
+
+
+export const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) {
+        return token = req?.cookies['TomsCookie'];
+    }
+    return token;
+  };
 
 export default initializePassport

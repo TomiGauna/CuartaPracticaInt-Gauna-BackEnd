@@ -1,10 +1,14 @@
 import { Router } from "express";
 import ProductManager from "../dao/MongoManagers/MongoProdManager.js";
 import CartManager from "../dao/MongoManagers/MongoCartManager.js";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import { cookieExtractor } from "../config/passport.config.js";
 
 const router = Router();
 const prodManager = new ProductManager();
 const cartManager = new CartManager();
+router.use(cookieParser());
 
 router.get('/products', async(req, res) => {
     let limit = parseInt(req.query.limit);
@@ -18,15 +22,15 @@ router.get('/products', async(req, res) => {
     const separation = {
         productslpsq: products,
         prodsDocs: prodsToJSON,
-        user: req.session.user
-    }
+        user: req.user,
+    };
 
     res.render ('prods', { title: 'iTech Store',
                             style: 'home.css',
                             allProds: separation.prodsDocs,
                             workedDocs: separation.productslpsq,
-                            user: separation.user })
-})
+                            user: separation.user });
+});
 
 router.get("/carts/:cid", async (req, res) => {
   try {
@@ -65,11 +69,12 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/profile', (req, res) => {
-    res.render('profile', { user: req.session.user, title: 'Profile', style: 'profile.css' });
+    res.render('profile', { user: req.user, title: 'Profile', style: 'profile.css' });
 });
 
 router.get('/changePassword', (req, res) => {
     res.render('changePassword', { title: 'Password Restarting', style: 'changePswd.css' })
 })
+
 
 export default router
