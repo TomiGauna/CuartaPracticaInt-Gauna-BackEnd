@@ -22,7 +22,7 @@ router.post('/login', passport.authenticate('login', { session: false, failureRe
     let user = req.user;
     if (!user) return res.status(400).send({ status: "error", error: "Check username or password" });
     
-    /* user.email.includes('admin') ? role = true : role; */
+    req.user.user.email.includes('admin') ? role = true : role;
 
     /* req.session.user = {
         name: `${user.firstName} ${user.lastName}`,

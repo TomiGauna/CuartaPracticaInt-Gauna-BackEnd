@@ -12,8 +12,7 @@ router.get('/', async(req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        /* let algo = "mensaje agregado" */
-        const { user, message } = req.body
+        const { user, message } = req.body;
         const newMessage = await messageManager.addMessage(user, message);
         const allMessages = await messageManager.getAllMessages();
         io.emit('obtainMsg', allMessages)

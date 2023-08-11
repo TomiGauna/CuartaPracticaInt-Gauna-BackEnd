@@ -2,28 +2,25 @@ import express from "express";
 import mongoose from "mongoose";
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
-import productsRouter from './routes/productsRouter.js';
-import cartsRouter from './routes/cartsRouter.js';
+/* import productsRouter from './routes/productsRouter.js'; */
+import prodsRouter from './newRoutes/productsRouter.js'
+import cartsRouter from './newRoutes/cartsRouter.js'
 import messagesRouter from './routes/messagesRouter.js'
 import viewsRouter from './routes/viewsRouter.js';
-import sessionsRouter from './routes/sessionsRouter.js';
-import MessageManager from "./dao/MongoManagers/MongoMsgManager.js";
+import sessionsRouter from './newRoutes/sessionsRouter.js';
 import { Server } from "socket.io";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-const hidden = 'Belalugosi21';
-
-const messageManager = new MessageManager();
+import config from './config/config.js';
 
 const app = express();
-const listeningPort = 8080;
 
-const serverHttp = app.listen(listeningPort, () => console.log(`Hearing on port ${listeningPort}`)); 
+const serverHttp = app.listen(config.port, () => console.log(`Hearing on port ${config.port}`)); 
 export const io = new Server(serverHttp);
 
-const mongo = `mongodb+srv://tomgauna:${hidden}@backcluster.aokzmna.mongodb.net/ecommerce`;
+const mongo = config.mongoUrl;
 const connection = mongoose.connect(mongo, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -56,23 +53,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', viewsRouter);
-app.use('/api/products/', productsRouter); 
+app.use('/api/products/', prodsRouter);
+/* app.use('/api/products/', productsRouter);  */
 app.use('/api/carts/', cartsRouter);
 app.use('/api/messages/', messagesRouter);
 app.use('/api/sessions/', sessionsRouter);
-
-const messages = [];
-
-io.on('connection', socket => {
-    console.log("Socket connected");
-
-    socket.on('message', data => {
-        messages.push(data);
-        messageManager.addMessage(data);
-        io.emit('messageLogs', messages);
-    })
-
-    socket.on('authenticated', data => {
-        socket.broadcast.emit('newUserConnected', data);
-    })
-})
