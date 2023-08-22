@@ -1,4 +1,5 @@
 import { ProductsService } from "../services/productsService.js";
+import ProductsDTO from "../dtos/productsDTO.js";
 
 const prodService = new ProductsService();
 
@@ -18,7 +19,7 @@ export const getProdById = async(req, res) => {
     try {
         const pid = req.params.pid;
         const prodInvolved = await prodService.getProdById(pid);
-        (!prodInvolved) ? res.status(404).send('Product not found') : res.status(200).send({ payload: prodInvolved });
+        (!prodInvolved) ? res.status(404).send('Product not found') : res.status(200).send({ payload: new ProductsDTO(prodInvolved) });
         
     } catch (error) {
         res.status(500).send({ status: error.message, msg: 'Error to get product data' });
@@ -43,7 +44,7 @@ export const updateProduct = async (req, res) => {
         const body = req.body;
         const modifiedProd = await prodService.updateProd(updId, body);
 
-        modifiedProd ? res.status(200).send({message: 'Product updated successfully', payload}) : res.status(404).send('Non-existent product');
+        modifiedProd ? res.status(200).send({message: 'Product updated successfully', modifiedProd}) : res.status(404).send('Non-existent product');
     
       } catch (error) {
         res.status(500).send(error.message);

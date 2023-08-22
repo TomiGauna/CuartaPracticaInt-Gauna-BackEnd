@@ -43,7 +43,7 @@ export const addingProdInCart = async(req, res) => {
         const pId = req.params.pid;
         const newProdInC = await cartsServ.includeProdInC(cId, pId);
 
-        !newProdInC ? res.status(400).send({ Error: 'Wrong values. Verify entrance data' }) :
+        !newProdInC ? res.status(400).send({ Error: 'Error to add in cart. Verify ID' }) :
                       res.status(200).send({ msg: 'Product added successfully', payload: newProdInC });
     } catch (error) {
         res.status(500).send({ Error: 'Server error to add product in cart', message: error.message })
@@ -112,4 +112,14 @@ export const deleteCart = async(req, res) => {
     } catch (error) {
         res.status(500).send('Server error' + error.message);
     };
-}
+};
+
+export const purchase = async(req, res) => {
+    const cId = req.params.cid;
+    try {
+        const purchaseCartResult = await cartsServ.checkoutCart(cId, req.user.email);
+        res.status(201).send({ status: 1, msg: 'Cart successfully purchased', purchaseCartResult: purchaseCartResult });
+    } catch (error) {
+        res.status(500).json({ status: 0, error: error.message });
+    }
+};

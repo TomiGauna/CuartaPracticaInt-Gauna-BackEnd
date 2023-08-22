@@ -58,7 +58,6 @@ export default class ProductsDao{
   async deleteProduct(id){
     try {
       const prodDeleted = this.productsModel.deleteOne({ _id: id})
-      return prodDeleted
     } catch (error) {
       Error('Error to delete product from db')
     }

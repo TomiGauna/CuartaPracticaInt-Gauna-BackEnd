@@ -1,5 +1,5 @@
-import { io } from "./app.js";
-import MessageManager from "./newDaos/messagesDAO.js";
+import { io } from "../app.js";
+import MessageManager from "../newDaos/messagesDAO.js";
 
 const messageManager = new MessageManager();
 const messages = [];

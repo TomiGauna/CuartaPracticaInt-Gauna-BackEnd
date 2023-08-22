@@ -1,17 +1,17 @@
-import MessageManager from "../newDaos/messagesDAO";
+import MessagesRepository from '../repositories/messagesRepo.js';
 
 export default class MessagesService{
     constructor(){
-        this.messagesDao =  new MessageManager();
+        this.repos =  new MessagesRepository();
     };
 
     getAllMsgs = async() => {
-        let messagesObtaining = await this.messagesDao.getAllMessages();
+        let messagesObtaining = await this.repos.getAllMessages();
         return messagesObtaining;
     };
 
-    addMsg = async() => {
-        let addingMsg = await this.messagesDao.addMessage();
+    addMsg = async(body) => {
+        let addingMsg = await this.repos.addMessage(body);
         return addingMsg;
     };
 }

@@ -20,11 +20,11 @@ export default class CartsDao{
       try {
         const cartId = await this.cartsModel.findById(id);
         if (!cartId) {
-          return "No se encontro el carrito";
+          return "Cart not found";
         }
-        return cartId.products;
+        return cartId;
       } catch (error) {
-        throw new Error ("ocurrio un error en la pagina")
+        throw new Error (error.message)
       }
     };
 
@@ -151,5 +151,5 @@ export default class CartsDao{
           } catch (error) {
             Error('Error to remove cart from db')
           }
-    }
+    };
 };

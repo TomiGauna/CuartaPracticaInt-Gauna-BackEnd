@@ -1,10 +1,10 @@
 import passport from "passport";
 import local from 'passport-local';
 import userModel from '../dao/models/user.model.js';
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword } from "../utils/utils.js";
 import GitHubStrategy from 'passport-github2';
 import jwt from 'passport-jwt';
-import { PRIVATE_KEY, generateToken, authToken } from "../utils.js";
+import { PRIVATE_KEY, generateToken, authToken } from "../utils/utils.js";
 
 const localStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
@@ -100,6 +100,8 @@ const initializePassport = () => {
     }
     ));
 
+    
+
 
     passport.serializeUser((user, done) => {
         done(null, user._id);
@@ -123,6 +125,21 @@ export const cookieExtractor = (req) => {
         return token = req?.cookies['TomsCookie'];
     }
     return token;
-  };
+};
+
+export const isAdminMiddleware = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.userRole === true) {
+      return next();
+    }
+    res.status(403).json({ message: 'Only admins allowed' });
+};
+  
+export const isUserMiddleware = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.userRole === false) {
+      return next();
+    }
+    res.status(403).json({ message: 'Only users allowed' });
+};
+  
 
 export default initializePassport

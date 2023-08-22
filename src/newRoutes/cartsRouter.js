@@ -8,13 +8,14 @@ import { getCarts,
     deleteProdInCart, 
     cleaningCart,
     deleteCart } from "../controllers/cartsController.js";
+import { isUserMiddleware } from "../config/passport.config.js";
 
 const router = Router();
 
 router.get('/', getCarts);
 router.get('/:cid/', getCartById);
 router.post('/', creatingCart);
-router.post('/:cid/product/:pid', addingProdInCart);
+router.post('/:cid/product/:pid', isUserMiddleware, addingProdInCart);
 router.put('/:cid/', updateCart);
 router.put('/:cid/product/:pid/', updateQuantity);
 router.delete('/:cid/', cleaningCart);

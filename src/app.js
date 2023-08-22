@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import handlebars from 'express-handlebars';
-import __dirname from './utils.js';
+import __dirname from './utils/utils.js';
 /* import productsRouter from './routes/productsRouter.js'; */
 import prodsRouter from './newRoutes/productsRouter.js'
 import cartsRouter from './newRoutes/cartsRouter.js'
@@ -32,7 +32,7 @@ const connection = mongoose.connect(mongo, {
 
 app.engine('handlebars', handlebars.engine());
 
-app.set('views', __dirname+'/views');
+app.set('views', __dirname+'./views');
 app.set('view engine', 'handlebars');
 
 app.use(express.json());
