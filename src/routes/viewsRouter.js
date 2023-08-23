@@ -17,9 +17,9 @@ router.get('/products', products);
 
 router.get("/carts/:cid" ,getCartbyId);
 
-router.get('/realtimeproducts', realTimeProds)
+router.get('/realtimeproducts', realTimeProds);
 
-router.get('/chat', isUserMiddleware, chat)
+router.get('/chat', isUserMiddleware, chat);
 
 router.get('/login', login)
 

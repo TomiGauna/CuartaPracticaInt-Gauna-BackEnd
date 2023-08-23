@@ -1,9 +1,9 @@
-import { ticketsRepository } from '../repositories/index.js';
+import TicketsRepository from '../repositories/ticketsRepo.js';
 import shortid from 'shortid';
 
-class TicketService {
+class TicketsService {
     constructor() {
-        this.ticketsRepository = ticketsRepository;
+        this.ticketsRepository = new TicketsRepository();
     }
 
     ticketFieldsValidation = async (ticket) => {
@@ -38,4 +38,6 @@ class TicketService {
         }
     }
 
-}
+};
+
+export default TicketsService

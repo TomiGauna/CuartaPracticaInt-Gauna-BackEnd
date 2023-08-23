@@ -7,7 +7,8 @@ import { getCarts,
     updateQuantity, 
     deleteProdInCart, 
     cleaningCart,
-    deleteCart } from "../controllers/cartsController.js";
+    deleteCart,
+    purchase } from "../controllers/cartsController.js";
 import { isUserMiddleware } from "../config/passport.config.js";
 
 const router = Router();
@@ -21,5 +22,6 @@ router.put('/:cid/product/:pid/', updateQuantity);
 router.delete('/:cid/', cleaningCart);
 router.delete('/:cid/product/:pid', deleteProdInCart);
 router.delete('/delete/:cid/', deleteCart);
+router.get('/:cid/purchase', purchase);
 
 export default router

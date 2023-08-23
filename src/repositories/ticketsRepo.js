@@ -1,7 +1,9 @@
+import TicketsDAO from "../newDaos/ticketsDAO.js";
+
 export default class TicketsRepository {
     
-    constructor(dao) {
-        this.dao = dao;
+    constructor() {
+        this.dao = new TicketsDAO();
     }
 
     createTicket = async (newFields) => {
@@ -13,5 +15,4 @@ export default class TicketsRepository {
         const ticket = await this.dao.getTicketByCode(ticketCode);
         return ticket;
     }
-
 }

@@ -1,5 +1,5 @@
 import userModel from "../dao/models/user.model.js";
-import { createHash } from '../utils/utils.js';
+import { createHash } from '../utils.js';
 import UsersDTO from "../dtos/usersDTO.output.js";
 
 ///////////////////////////////////////////////////REGISTER
@@ -17,8 +17,9 @@ export const failedRegister = async(req, res) => {
 export const login = async(req, res) => {
     let user = req.user;
     if (!user) return res.status(400).send({ status: "error", error: "Check username or password" });
+    console.log(user.payload)
     
-    req.user.user.email.includes('admin') ? role = true : role;
+    /* req.user.user.email.includes('admin') ? role = true : role; */
 
     /* req.session.user = {
         name: `${user.firstName} ${user.lastName}`,

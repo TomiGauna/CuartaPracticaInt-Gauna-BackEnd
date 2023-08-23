@@ -1,14 +1,12 @@
-import { Router } from "express";
 import ProductManager from "../dao/MongoManagers/MongoProdManager.js";
 import CartManager from "../dao/MongoManagers/MongoCartManager.js";
 import cookieParser from "cookie-parser";
 /* import passport from "passport";
 import { cookieExtractor } from "../config/passport.config.js"; */
 
-const router = Router();
 const prodManager = new ProductManager();
 const cartManager = new CartManager();
-router.use(cookieParser());
+/* router.use(cookieParser()); */
 
 
 export const products = async(req, res) => {
@@ -44,7 +42,7 @@ export const getCartbyId = async (req, res) => {
         style: 'style.css'
       });
     } catch (error) {
-      console.error("Internal Server Error: ", error);
+      console.error("Internal Server Error: ", error.message);
       res.status(500).send("Fail to get products");
     };
 };
@@ -57,7 +55,7 @@ export const realTimeProds = async(req, res) => {
 };
 
 export const chat = (req, res) => {
-    res.render('chat', {title: "Application's Chat",
+    res.render('chat', { title: "Application's Chat",
                          style: 'css/chat.css' })
 };
 
@@ -76,6 +74,3 @@ export const profile = (req, res) => {
 export const changePswd = (req, res) => {
     res.render('changePassword', { title: 'Password Restarting', style: 'changePswd.css' })
 };
-
-
-export default router

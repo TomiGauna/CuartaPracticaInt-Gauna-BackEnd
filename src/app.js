@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import handlebars from 'express-handlebars';
-import __dirname from './utils/utils.js';
+import __dirname from './utils.js';
 /* import productsRouter from './routes/productsRouter.js'; */
 import prodsRouter from './newRoutes/productsRouter.js'
 import cartsRouter from './newRoutes/cartsRouter.js'
@@ -32,7 +32,7 @@ const connection = mongoose.connect(mongo, {
 
 app.engine('handlebars', handlebars.engine());
 
-app.set('views', __dirname+'./views');
+app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
 
 app.use(express.json());
@@ -52,9 +52,9 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', viewsRouter);
 app.use('/api/products/', prodsRouter);
 /* app.use('/api/products/', productsRouter);  */
 app.use('/api/carts/', cartsRouter);
 app.use('/api/messages/', messagesRouter);
 app.use('/api/sessions/', sessionsRouter);
+app.use('/', viewsRouter);
