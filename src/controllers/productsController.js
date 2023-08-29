@@ -1,5 +1,8 @@
 import { ProductsService } from "../services/productsService.js";
 import ProductsDTO from "../dtos/productsDTO.js";
+import CustomError from "../errors/customError.js";
+import { serverProdsErrorInfo } from "../errors/info.js";
+import EErrors from "../errors/enums.js";
 
 const prodService = new ProductsService();
 
@@ -10,7 +13,12 @@ export const getAllProducts = async(req, res) => {
         res.send(JSON.stringify(allProds));
 
     } catch (error) {
-        res.status(500).send({ status: error, message: 'Products cannot be reached' });
+        CustomError.CreateError({
+            name: 'Server performance error',
+            cause: serverProdsErrorInfo(),
+            code: EErrors.SERVER_ERROR,
+            message: 'Fail to get, create, update or delete products'
+        })
     };
 };
 
@@ -22,7 +30,12 @@ export const getProdById = async(req, res) => {
         (!prodInvolved) ? res.status(404).send('Product not found') : res.status(200).send({ payload: new ProductsDTO(prodInvolved) });
         
     } catch (error) {
-        res.status(500).send({ status: error.message, msg: 'Error to get product data' });
+        CustomError.CreateError({
+            name: 'Server performance error',
+            cause: serverProdsErrorInfo(),
+            code: EErrors.SERVER_ERROR,
+            message: 'Fail to get, create, update or delete products'
+        });
     };
 }
 
@@ -34,7 +47,12 @@ export const addProduct = async(req, res) => {
         creatingProd ? res.status(200).send('Product created successfully', creatingProd) : res.status(400).send('Bad request. Verify entrance data');
 
     } catch (error) {
-        res.status(500).send({error: 'Server failure to add product', message: error.message});   
+        CustomError.CreateError({
+            name: 'Server performance error',
+            cause: serverProdsErrorInfo(),
+            code: EErrors.SERVER_ERROR,
+            message: 'Fail to get, create, update or delete products'
+        });   
     };
 };
 
@@ -47,7 +65,12 @@ export const updateProduct = async (req, res) => {
         modifiedProd ? res.status(200).send({message: 'Product updated successfully', modifiedProd}) : res.status(404).send('Non-existent product');
     
       } catch (error) {
-        res.status(500).send(error.message);
+        CustomError.CreateError({
+            name: 'Server performance error',
+            cause: serverProdsErrorInfo(),
+            code: EErrors.SERVER_ERROR,
+            message: 'Fail to get, create, update or delete products'
+        });
       }
 };
 
@@ -59,6 +82,11 @@ export const deleteProduct = async (req, res) => {
         prodToDelete ? res.status(200).send('Product deleted successfully') : res.status(404).send('None product has the called id');
     
       } catch (error) {
-        res.status(500).send({ error: 'Server error to delete element', message: error.message });
+        CustomError.CreateError({
+            name: 'Server performance error',
+            cause: serverProdsErrorInfo(),
+            code: EErrors.SERVER_ERROR,
+            message: 'Fail to get, create, update or delete products'
+        });
       }
 };

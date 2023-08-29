@@ -1,6 +1,7 @@
 import userModel from "../dao/models/user.model.js";
-import { createHash } from '../utils.js';
+import { PRIVATE_KEY, createHash, generateToken } from '../utils.js';
 import UsersDTO from "../dtos/usersDTO.output.js";
+import jwt from 'jsonwebtoken';
 
 ///////////////////////////////////////////////////REGISTER
 export const register = async(req, res) => {
@@ -17,17 +18,18 @@ export const failedRegister = async(req, res) => {
 export const login = async(req, res) => {
     let user = req.user;
     if (!user) return res.status(400).send({ status: "error", error: "Check username or password" });
-    console.log(user.payload)
+    console.log(user.user)
     
-    /* req.user.user.email.includes('admin') ? role = true : role; */
-
-    /* req.session.user = {
+/*     req.user.email.includes('admin') ? role = true : role;
+ */
+    req.session.user = {
         name: `${user.firstName} ${user.lastName}`,
         email: user.email,
         age: user.age,
-        userRole: role,
-    } */
-    res.cookie('TomsCookie', req.user, { httpOnly: true }).status(200).send('Correct Cookie Setting');
+        userRole: user.role,
+    }
+    /* const token = jwt.sign(user, PRIVATE_KEY, {expiresIn: '1d'}) */
+    res.cookie('TomsCookie', req.user, { httpOnly: true }).status(200).send('Correct Cookie Setting', req.session.user);
 };
 
 ////////////////////////////////////////////////////FAILEDLOGIN

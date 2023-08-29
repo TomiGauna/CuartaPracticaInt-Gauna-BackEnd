@@ -7,7 +7,9 @@ import { products,
         login,
         register,
         changePswd,
-        profile } from "../controllers/viewsController.js";
+        profile, 
+        mockingProds,
+        createMockingProds } from "../controllers/viewsController.js";
 import { isUserMiddleware } from "../config/passport.config.js";
 
 const router = Router();
@@ -28,6 +30,10 @@ router.get('/register', register);
 router.get('/profile', profile);
 
 router.get('/changePassword', changePswd);
+
+router.get('/mockingproducts', mockingProds);
+
+router.post('/mockingproducts', createMockingProds);
 
 
 export default router

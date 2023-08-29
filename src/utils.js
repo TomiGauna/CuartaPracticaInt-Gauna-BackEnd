@@ -2,6 +2,7 @@ import {fileURLToPath} from 'url';
 import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { faker } from '@faker-js/faker';
 
 export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password);
@@ -27,6 +28,21 @@ export const authToken = (req, res, next) => {
         req.user = credentials.user;
         next();
     })
+};
+
+////////////////////////MOCKING FUNCTION
+faker.location = 'es'
+export const generateProd = () => {
+    return {
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        category: faker.commerce.department(),
+        code: faker.number.int({ min: 0, max: 100000 }),
+        stock: faker.number.int({ min: 0, max: 100 }),
+        thumbnail: [],
+        id: faker.number.int({ min: 1, max: 123456789 })
+    }
 }
 
 export default __dirname;
