@@ -18,7 +18,7 @@ export const failedRegister = async(req, res) => {
 export const login = async(req, res) => {
     let user = req.user;
     if (!user) return res.status(400).send({ status: "error", error: "Check username or password" });
-    console.log(user.user)
+    /* console.log(user.user) */
     
 /*     req.user.email.includes('admin') ? role = true : role;
  */

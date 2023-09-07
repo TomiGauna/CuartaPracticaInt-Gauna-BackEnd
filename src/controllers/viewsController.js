@@ -112,3 +112,17 @@ export const createMockingProds = (req, res) => {
     productss.push(newProd);
     res.send({ status: 'success', newProd })
 };
+
+export const loggerTest = (req, res) => {
+    req.logger.fatal('Fatal error');
+    req.logger.error('Something went wrong');
+    req.logger.warning('Something could be malfunctioning');
+    req.logger.info('Throw some information about the app');
+    req.logger.http('HTTP Alert');
+    req.logger.debug('Something to debug');
+
+    res.send({ title: 'Loggers Testing',
+        status: 'Testing',
+        message: 'You have reached the Logger Test at this endpoint. Please look over your favourite terminal to see loggers work correctly'
+    })
+}

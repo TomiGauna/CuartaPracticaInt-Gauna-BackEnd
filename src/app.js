@@ -15,10 +15,16 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import config from './config/config.js';
 import errorHandler from './errors/middlewares/index.js';
+import { addLogger } from "./utils/loggers.js";
+import { mainLogger } from "./utils/loggers.js";
 
 const app = express();
 
-const serverHttp = app.listen(config.port, () => console.log(`Hearing on port ${config.port}`)); 
+const serverHttp = app.listen(config.port, () => {
+    const logger = mainLogger()
+    logger.info(`Hearing on port ${config.port}`);
+});
+
 export const io = new Server(serverHttp);
 
 const mongo = config.mongoUrl;
@@ -26,9 +32,11 @@ const connection = mongoose.connect(mongo, {
     useNewUrlParser: true,
     useUnifiedTopology: true
         }).then((conn) => {
-            console.log('Mongo DB connected')
+            const logger = mainLogger();
+            logger.info(`Mongo DB connected in ${config.environment} environment`)
         }).catch((error) => {
-            console.log('Something Broke!')
+            const logger = mainLogger();
+            logger.error('Something Broke!')
         })
 
 app.engine('handlebars', handlebars.engine());
@@ -52,6 +60,8 @@ app.use(session({
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(addLogger);
 
 app.use('/api/products/', prodsRouter);
 /* app.use('/api/products/', productsRouter);  */

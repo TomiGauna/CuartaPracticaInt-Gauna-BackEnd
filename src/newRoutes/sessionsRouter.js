@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from 'passport';
 import cookieParser from "cookie-parser";
-import { register, failedRegister, login, githubCb, failedLogin, logout, currentRoute } from '../controllers/sessionsController2.js';
+import { register, failedRegister, login, githubCb, failedLogin, logout, currentRoute } from '../controllers/sessionsController.js';
 
 const router = Router();
 router.use(cookieParser());
