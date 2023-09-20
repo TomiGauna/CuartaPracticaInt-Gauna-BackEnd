@@ -39,6 +39,11 @@ const prodsSchema = new mongoose.Schema({
         type: Boolean
     }, */
 
+    owner: {
+        type: String,
+        default: 'admin',
+    },
+
     thumbnail: {
         type: Array,
         required: true

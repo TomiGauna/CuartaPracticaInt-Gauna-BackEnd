@@ -27,7 +27,8 @@ const serverHttp = app.listen(config.port, () => {
 
 export const io = new Server(serverHttp);
 
-const mongo = config.mongoUrl;
+const mongo = config.mongoUrl
+
 const connection = mongoose.connect(mongo, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -36,7 +37,7 @@ const connection = mongoose.connect(mongo, {
             logger.info(`Mongo DB connected in ${config.environment} environment`)
         }).catch((error) => {
             const logger = mainLogger();
-            logger.error('Something Broke!')
+            logger.error('Something Broke! '+ error.message);
         })
 
 app.engine('handlebars', handlebars.engine());

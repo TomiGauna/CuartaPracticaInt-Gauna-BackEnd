@@ -1,7 +1,9 @@
 import userModel from "../dao/models/user.model.js";
-import { PRIVATE_KEY, createHash, generateToken } from '../utils.js';
+import { PRIVATE_KEY, authToken, createHash, generateToken } from '../utils.js';
 import UsersDTO from "../dtos/usersDTO.output.js";
-import jwt from 'jsonwebtoken';
+import { UsersController } from "./usersController.js";
+
+const usersController = new UsersController();
 
 ///////////////////////////////////////////////////REGISTER
 export const register = async(req, res) => {
@@ -18,18 +20,17 @@ export const failedRegister = async(req, res) => {
 export const login = async(req, res) => {
     let user = req.user;
     if (!user) return res.status(400).send({ status: "error", error: "Check username or password" });
-    /* console.log(user.user) */
     
-/*     req.user.email.includes('admin') ? role = true : role;
- */
     req.session.user = {
         name: `${user.firstName} ${user.lastName}`,
         email: user.email,
         age: user.age,
-        userRole: user.role,
+        role: user.role,
     }
-    /* const token = jwt.sign(user, PRIVATE_KEY, {expiresIn: '1d'}) */
-    res.cookie('TomsCookie', req.user, { httpOnly: true }).status(200).send('Correct Cookie Setting', req.session.user);
+
+    /* console.log(user.firstName); */
+    /* const accessToken = generateToken(user); */
+    res.cookie('TomsCookie', user, { httpOnly: true }).status(200).send({ status: 1 }, 'Correct Cookie Setting', user, req.session.user);
 };
 
 ////////////////////////////////////////////////////FAILEDLOGIN
@@ -60,7 +61,14 @@ export const changePassword = async(req, res) => {
     const newHashedPswd = createHash(password);
     await userModel.updateOne({ _id: user._id }, { $set: { password: newHashedPswd }});
     res.send({ status: 'success', message: 'Password modified successfully'});
-}; 
+};
+
+/////////////////////////////////////////////////////////RETRIVE PASS VIA EMAIL
+export const sendingMailToRecover = async(req, res) => {
+    let email = req.params.email;
+    await usersController.sendEmail(email);
+    res.send('Mail sent!. Please check your email inbox');
+}
 
 /////////////////////////////////////////////////LOGOUT
 export const logout = (req, res) => {
@@ -74,4 +82,32 @@ export const logout = (req, res) => {
 export const githubCb = async (req, res) => {
     req.session.user = req.user;
     res.redirect('/products');
+};
+
+///////////////////////////////////////////////////////////ROLE CHANGING
+export const changeUserRole = async(req, res) => {
+    const userId = req.params.uid;
+    const user = await userModel.findById(userId);
+
+    try {
+
+        if (!user) {
+            res.status(400).send('User Not Found')
+        } else {
+           
+            if (user.role = "user") {
+                /* console.log('just user') */
+               await userModel.updateOne({ _id: user._id }, { $set: { role: "premium" }});
+               await user.save();
+            } else {
+                /* console.log('userprem') */
+                await userModel.updateOne({ _id: user._id }, { $set: { role: "user" }});
+                await user.save()
+            }
+        };
+        res.status(200).send(`Role modified successfully. Your current role is ${user.role}`, { status: 1 }, user);
+
+    } catch (error) {
+        res.status(500).send('Server Error: ', error.message)
+    };
 };

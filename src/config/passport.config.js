@@ -24,13 +24,28 @@ const initializePassport = () => {
                 let user = await userModel.findOne({ email: username });
                 if (user) return done(null, false);
 
+                let userRole;
+
+                if (email.includes('admin')) {
+                    userRole = 'admin';
+                };
+
+                if (email.includes('premium')) {
+                    userRole = 'premium';
+                };
+
+                if (!(email.includes('admin') || email.includes('premium'))){
+                    userRole = 'user';
+                };
+
                 const newUser = {
                     firstName,
                     lastName,
                     email,
                     age: parseInt(age),
                     password: createHash(password),
-                }
+                    role: userRole,
+                };
 
                 let outcome = await userModel.create(newUser);
                 return done(null, outcome);
@@ -52,7 +67,7 @@ const initializePassport = () => {
             if(!isValidPassword(user, password)) return done(null, false);
 
             const jwt = generateToken(user)
-            return done(null, jwt);
+            return done(null, user, jwt);
 
         } catch (error) {
             return done({ error: 'Fail to login. Please check your email/password' })
@@ -128,14 +143,22 @@ export const cookieExtractor = (req) => {
 };
 
 export const isAdminMiddleware = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.userRole === true) {
+    if (req.isAuthenticated() && req.user.role === 'admin') {
       return next();
     }
     res.status(403).json({ message: 'Only admins allowed' });
 };
   
 export const isUserMiddleware = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.userRole === false) {
+    if (req.isAuthenticated() && req.user.role === 'user') {
+      return next();
+    }
+    console.log(req.user.role)
+    res.status(403).json({ message: 'Only users allowed' });
+};
+
+export const isPremiumMiddleware = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.role === 'premium') {
       return next();
     }
     res.status(403).json({ message: 'Only users allowed' });

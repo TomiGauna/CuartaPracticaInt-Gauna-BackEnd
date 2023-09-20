@@ -1,12 +1,14 @@
 import ProductManager from "../dao/MongoManagers/MongoProdManager.js";
 import CartManager from "../dao/MongoManagers/MongoCartManager.js";
-import { generateProd } from "../utils.js";
+import { generateProd, tokenValidation } from "../utils.js";
 import CustomError from "../errors/customError.js";
 import { generateProdErrorInfo } from "../errors/info.js";
 import EErrors from "../errors/enums.js";
+import { UsersController } from "./usersController.js";
 
 const prodManager = new ProductManager();
 const cartManager = new CartManager();
+const usersController = new UsersController();
 
 
 export const products = async(req, res) => {
@@ -21,7 +23,7 @@ export const products = async(req, res) => {
     const separation = {
         productslpsq: products,
         prodsDocs: prodsToJSON,
-        user: req.user,
+        user: req.cookies.TomsCookie,
     };
 
     res.render ('prods', { title: 'iTech Store',
@@ -68,12 +70,16 @@ export const register = (req, res) => {
 };
 
 export const profile = (req, res) => {
-    res.render('profile', { user: req.user, title: 'Profile', style: 'profile.css' });
+    res.render('profile', { user: req.cookies.TomsCookie, title: 'Profile', style: 'profile.css' });
 };
 
 export const changePswd = (req, res) => {
-    res.render('changePassword', { title: 'Password Restarting', style: 'changePswd.css' })
+    res.render('changePassword', { title: 'Password Restarting', style: 'changePswd.css' });
 };
+
+export const retrievePass = (req, res) => {
+    res.render('passRetrieval', { /* token: req.params.token */ })
+}
 
 const productss = [];
 export const mockingProds = async(req, res) => {

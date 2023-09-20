@@ -10,8 +10,10 @@ import { products,
         profile, 
         mockingProds,
         createMockingProds, 
-        loggerTest } from "../controllers/viewsController.js";
+        loggerTest, 
+        retrievePass} from "../controllers/viewsController.js";
 import { isUserMiddleware } from "../config/passport.config.js";
+import { tokenValidation } from "../utils.js";
 
 const router = Router();
 router.use(cookieParser());
@@ -31,6 +33,8 @@ router.get('/register', register);
 router.get('/profile', profile);
 
 router.get('/changePassword', changePswd);
+
+router.get('/retrievePass/:token', /* tokenValidation */ retrievePass);
 
 router.get('/mockingproducts', mockingProds);
 

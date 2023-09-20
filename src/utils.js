@@ -30,6 +30,22 @@ export const authToken = (req, res, next) => {
     })
 };
 
+export const tokenValidation = (req, res, next) => {
+
+    try {
+        const token = req.params.token;
+        jwt.verify(token, PRIVATE_KEY);
+        const data = jwt.decode(token);
+        console.log('Data: ', {data});
+        req.email = data.email;
+
+        next();
+    } catch (error) {
+        res.status(500).json('Fail to validate token: ', error.message);
+    }
+    
+}
+
 ////////////////////////MOCKING FUNCTION
 faker.location = 'es'
 export const generateProd = () => {

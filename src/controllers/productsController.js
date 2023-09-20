@@ -51,11 +51,14 @@ export const getProdById = async(req, res) => {
 export const addProduct = async(req, res) => {
 
     try {
+        const user = req.user;
         const newProd = req.body;
         const creatingProd = await prodService.addProd(newProd);
-
+        
         if (creatingProd) {
-            res.status(200).send('Product created successfully', creatingProd)
+            creatingProd.owner = user.email;
+            await creatingProd.save();
+            res.status(200).send({status: 1}, 'Product created successfully', creatingProd)
         } else {
             req.logger.error('Error: A new product cannot be created')
             res.status(400).send('Bad request. Verify entrance data')
