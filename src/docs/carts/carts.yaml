@@ -1,0 +1,213 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Shows all the carts available
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Successful obtention of carts information
+        '500':
+          description: Internal server error
+    post:
+      summary: Creates a new cart
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Cart'
+      responses: 
+        '201':
+          description: Successful creation of cart
+          content: 
+            application/json:
+              schema: 
+                $ref: '#components/schemas/Cart'
+        '500':
+          description: Internal server error
+  /api/carts/{cid}:
+    get:
+      summary: Looks for the cart that contains the specified id
+      tags:
+        - Carts
+      parameters:
+        name: cid
+        in: path
+        required: true
+        description: Id of the cart involved
+        schema:
+          $type: String
+      responses:
+        '200':
+          description: Successful cart obtention
+          content: 
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        '404':
+          description: Cart not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Changes the cart containing the specified id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Id of the cart to update
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful cart update
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart not found
+        "500":
+          description: Internal Server Error
+    delete:
+      summary: Removes the cart containing the specified id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID for delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The cart was deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart not found
+        "500":
+          description: Internal Server Error
+  /api/cart/{cid}/product/{pid}:
+    post:
+      summary: Adds a product to a cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID to which the product will be added
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID to add to the cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The product was added to the cart successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart or product not found
+        "500":
+          description: Internal Server Error
+    put:
+      summary: Updates a product in a cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID containing the product to update
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID to update in the cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The product in the cart was updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart or product not found
+        "500":
+          description: Internal Server Error
+    delete:
+      summary: Removes a product from a cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID containing the product to remove
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID to remove from the cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The product was removed from the cart successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart or product not found
+        "500":
+          description: Internal Server Error
+
+components:
+  schemas:
+    Carts:
+      type: array
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generated by Mongo
+        products:
+          type: array
+          description: Items chosen by user
+          items:
+            type: object
+            properties:
+              productId:
+                type: ObjectId
+                description: Product ID
+                required: true
+              quantity:
+                type: Number
+                description: Quantity of the product in the cart
+                required: true
+      example:
+        _id: ObjectId("647fa8c9e46dbc5a20320182")
+        products: []
+        total: 0
+        owner: "John Doe"
+        
+        
+        

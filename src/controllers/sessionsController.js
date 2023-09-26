@@ -85,26 +85,42 @@ export const githubCb = async (req, res) => {
 };
 
 ///////////////////////////////////////////////////////////ROLE CHANGING
-export const changeUserRole = async(req, res) => {
-    const userId = req.params.uid;
-    const user = await userModel.findById(userId);
+export const changeUserRole = (req, res) => {
+    
 
     try {
 
-        if (!user) {
-            res.status(400).send('User Not Found')
-        } else {
-           
-            if (user.role = "user") {
-                /* console.log('just user') */
+        const userId = req.params.uid;
+        const user = userModel.findById(userId);
+        const newRole = req.body;
+
+        
+
+        if ((user.role = 'premium') || (user.role = 'user')) {
+            console.log('new role: ', newRole)
+            const updatedUser = userModel.findByIdAndUpdate(
+              userId,
+              { role: newRole },
+              { new: true }
+            );
+                
+        }
+           /* console.log(user.role) */
+        /* if ((user.role = 'premium') || (user.role = 'user')) {
+            console.log(newRole);
+            await userModel.updateOne({ _id: user._id }, { $set: { role: newRole } });
+           /*  await user.save(); 
+            console.log(user.role);
+        } 
+            /* if (user.role = "user") {
+                console.log('just user')
                await userModel.updateOne({ _id: user._id }, { $set: { role: "premium" }});
                await user.save();
             } else {
-                /* console.log('userprem') */
+                console.log('userprem')
                 await userModel.updateOne({ _id: user._id }, { $set: { role: "user" }});
                 await user.save()
-            }
-        };
+            } */
         res.status(200).send(`Role modified successfully. Your current role is ${user.role}`, { status: 1 }, user);
 
     } catch (error) {

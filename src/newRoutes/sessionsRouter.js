@@ -21,7 +21,7 @@ router.post("/login", passport.authenticate('login', { session: false, failureRe
 router.get('/faillogin', failedLogin);
 
 router.get('/sendingEmail/:email', sendingMailToRecover);
-router.get('/premium/:uid', changeUserRole);
+router.put('/premium/:uid', changeUserRole);
 
 router.get('/current', passport.authenticate("current", { session: false }), currentRoute);
 

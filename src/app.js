@@ -17,6 +17,8 @@ import config from './config/config.js';
 import errorHandler from './errors/middlewares/index.js';
 import { addLogger } from "./utils/loggers.js";
 import { mainLogger } from "./utils/loggers.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from 'swagger-ui-express';
 
 const app = express();
 
@@ -38,13 +40,27 @@ const connection = mongoose.connect(mongo, {
         }).catch((error) => {
             const logger = mainLogger();
             logger.error('Something Broke! '+ error.message);
-        })
+        });
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: `iTech Store's API Documentation`,
+            description: 'Documentation of iTech Store with Swagger'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
 
 app.engine('handlebars', handlebars.engine());
 
 app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
 
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 app.use(express.static(__dirname+'/public'));
