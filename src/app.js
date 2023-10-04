@@ -31,7 +31,7 @@ export const io = new Server(serverHttp);
 
 const mongo = config.mongoUrl
 
-const connection = mongoose.connect(mongo, {
+export const connection = mongoose.connect(mongo, {
     useNewUrlParser: true,
     useUnifiedTopology: true
         }).then((conn) => {

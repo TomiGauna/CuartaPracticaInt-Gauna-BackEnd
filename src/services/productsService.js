@@ -10,6 +10,11 @@ export class ProductsService{
         return gettingProds;
     };
 
+    getProds = async() => {
+        let prods = await this.repos.getProds();
+        return prods
+    }
+
     getProdById = async(id) => {
         let searchingProd = await this.repos.getProdById(id);
         return searchingProd;

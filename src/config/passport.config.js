@@ -46,7 +46,7 @@ const initializePassport = () => {
                     password: createHash(password),
                     role: userRole,
                 };
-
+                
                 let outcome = await userModel.create(newUser);
                 return done(null, outcome);
 
@@ -63,6 +63,7 @@ const initializePassport = () => {
 
         try {
             const user = await userModel.findOne({ email: username });
+            console.log('passport user: ', user)
             if(!user) return done(null, false, { message: 'User does not exist' });
             if(!isValidPassword(user, password)) return done(null, false);
 
@@ -153,7 +154,7 @@ export const isUserMiddleware = (req, res, next) => {
     if (req.isAuthenticated() && req.user.role === 'user') {
       return next();
     }
-    console.log(req.user.role)
+    /* console.log(req.user.role) */
     res.status(403).json({ message: 'Only users allowed' });
 };
 
@@ -161,7 +162,7 @@ export const isPremiumMiddleware = (req, res, next) => {
     if (req.isAuthenticated() && req.user.role === 'premium') {
       return next();
     }
-    res.status(403).json({ message: 'Only users allowed' });
+    res.status(403).json({ message: 'Only premium users allowed' });
 };
   
 

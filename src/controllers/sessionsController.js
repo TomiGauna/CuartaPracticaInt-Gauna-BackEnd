@@ -7,7 +7,7 @@ const usersController = new UsersController();
 
 ///////////////////////////////////////////////////REGISTER
 export const register = async(req, res) => {
-    res.send({ status: 'success', message: 'User successfully registered' });
+    res.status(200).send({ status: 'success', message: 'User successfully registered' });
 }
 
 ///////////////////////////////////////////////////FAILED REGISTER
@@ -28,7 +28,7 @@ export const login = async(req, res) => {
         role: user.role,
     }
 
-    /* console.log(user.firstName); */
+    console.log('login controller');
     /* const accessToken = generateToken(user); */
     res.cookie('TomsCookie', user, { httpOnly: true }).status(200).send({ status: 1 }, 'Correct Cookie Setting', user, req.session.user);
 };

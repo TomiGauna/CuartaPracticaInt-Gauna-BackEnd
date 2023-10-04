@@ -11,6 +11,11 @@ export default class ProductsRepository{
         return products
     };
 
+    getProds = async() => {
+        const prods = await this.dao.getProducts();
+        return prods
+    }
+
     getProdById = async(id) => {
         const product = await this.dao.getProdById(id);
         return product

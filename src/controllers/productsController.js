@@ -24,6 +24,16 @@ export const getAllProducts = async(req, res) => {
     };
 };
 
+export const getProdsBeta = async(req, res) => {
+    try {
+        const prods = await prodService.getProds();
+        if (!prods) return res.status(400).send('Error to get products');
+        res.status(200).send(prods);
+    } catch (error) {
+        res.status(500).send('Server error: ', error.message);
+    }
+}
+
 export const getProdById = async(req, res) => {
 
     try {
@@ -58,7 +68,7 @@ export const addProduct = async(req, res) => {
         if (creatingProd) {
             creatingProd.owner = user.email;
             await creatingProd.save();
-            res.status(200).send({status: 1}, 'Product created successfully', creatingProd)
+            res.status(201).send({status: 1}, 'Product created successfully', creatingProd)
         } else {
             req.logger.error('Error: A new product cannot be created')
             res.status(400).send('Bad request. Verify entrance data')

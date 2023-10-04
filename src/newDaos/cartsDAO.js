@@ -135,7 +135,7 @@ export default class CartsDao{
           if(cart) {
             cart.products = []
             await cart.save()
-            return "Cart has just been cleaned"
+            return cart
           }else {
             throw new Error("Cart not found")
           }

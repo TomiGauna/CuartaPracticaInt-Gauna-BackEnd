@@ -36,7 +36,7 @@ export const creatingCart = async(req, res) => {
         const newCart = await cartsServ.creatingCart();
 
         !newCart ? res.status(400).send('Fail to create cart') : 
-        res.status(200).send({ msg: 'Cart created successfully', newCart });
+        res.status(201).send({ msg: 'Cart created successfully', newCart });
 
     } catch (error) {
         req.logger.error(error.message);

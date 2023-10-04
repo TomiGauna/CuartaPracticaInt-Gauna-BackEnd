@@ -23,7 +23,7 @@ export const authToken = (req, res, next) => {
     const token = authHeader.split(' ')[1];
 
     jwt.verify(token, PRIVATE_KEY, (err, credentials) => {
-        console.log(err);
+        console.log('error authToken: ', err);
         if (err) return res.status(401).send({ status: "error", error: "Unauthorized" })
         req.user = credentials.user;
         next();

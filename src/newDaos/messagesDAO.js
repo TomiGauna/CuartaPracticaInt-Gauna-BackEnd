@@ -1,4 +1,4 @@
-import messageModel from "../models/message.model.js";
+import messageModel from "../dao/models/message.model.js";
 
 export default class MessagesDAO{
 
@@ -19,7 +19,6 @@ export default class MessagesDAO{
     async addMessage(user, message){
         try {
             const newMessage = await this.messageModel.create({ user: user, message: message });
-            console.log(newMessage);
             return newMessage
         } catch (error) {
             Error('Failure at the moment of adding a message')

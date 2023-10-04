@@ -1,3 +1,4 @@
+/* import { error } from 'winston'; */
 import productModel from '../dao/models/product.model.js'
 
 export default class ProductsDao{
@@ -20,6 +21,12 @@ export default class ProductsDao{
     } catch (error) {
       Error('Fail to get collection data')
     }
+  }
+
+  async getProducts(){
+    const prods = await this.productsModel.find();
+    if(!prods) return 'Error to get products';
+    return prods
   }
 
   async getProdById(id){
