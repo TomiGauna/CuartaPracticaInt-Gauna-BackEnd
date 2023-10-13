@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from 'passport';
 import cookieParser from "cookie-parser";
+import setLastConnection from "../utils/lastconnMiddleware.js";
 import { register, 
     failedRegister, 
     login, 
@@ -11,17 +12,22 @@ import { register,
     sendingMailToRecover,
     changeUserRole} from '../controllers/sessionsController.js';
 
+
 const router = Router();
 router.use(cookieParser());
 
 router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), register);
 router.get('/failregister', failedRegister);
 
-router.post("/login", passport.authenticate('login', { session: false, failureRedirect: '/api/sessions/faillogin'}), login);
+router.post("/login", 
+            passport.authenticate('login', { session: false, failureRedirect: '/api/sessions/faillogin'}), 
+            setLastConnection,
+            login);
+
 router.get('/faillogin', failedLogin);
 
 router.get('/sendingEmail/:email', sendingMailToRecover);
-router.put('/premium/:uid', changeUserRole);
+router.get('/premium/:uid', changeUserRole);
 
 router.get('/current', passport.authenticate("current", { session: false }), currentRoute);
 

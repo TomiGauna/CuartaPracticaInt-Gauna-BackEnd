@@ -28,7 +28,6 @@ export const login = async(req, res) => {
         role: user.role,
     }
 
-    console.log('login controller');
     /* const accessToken = generateToken(user); */
     res.cookie('TomsCookie', user, { httpOnly: true }).status(200).send({ status: 1 }, 'Correct Cookie Setting', user, req.session.user);
 };
@@ -84,46 +83,39 @@ export const githubCb = async (req, res) => {
     res.redirect('/products');
 };
 
-///////////////////////////////////////////////////////////ROLE CHANGING
-export const changeUserRole = (req, res) => {
+///////////////////////////////////////////////////////////ROLE CHANGING(USERS)
+export const changeUserRole = async (req, res) => {
     
 
     try {
 
         const userId = req.params.uid;
-        const user = userModel.findById(userId);
-        const newRole = req.body;
+        const user = await userModel.findById(userId);
 
-        
+        const newRole = user.role === 'premium' ? 'user' : 'premium';
+        await user.updateOne({ role: newRole });
 
-        if ((user.role = 'premium') || (user.role = 'user')) {
-            console.log('new role: ', newRole)
-            const updatedUser = userModel.findByIdAndUpdate(
-              userId,
-              { role: newRole },
-              { new: true }
-            );
-                
-        }
-           /* console.log(user.role) */
-        /* if ((user.role = 'premium') || (user.role = 'user')) {
-            console.log(newRole);
-            await userModel.updateOne({ _id: user._id }, { $set: { role: newRole } });
-           /*  await user.save(); 
-            console.log(user.role);
-        } 
-            /* if (user.role = "user") {
-                console.log('just user')
-               await userModel.updateOne({ _id: user._id }, { $set: { role: "premium" }});
-               await user.save();
-            } else {
-                console.log('userprem')
-                await userModel.updateOne({ _id: user._id }, { $set: { role: "user" }});
-                await user.save()
-            } */
+
         res.status(200).send(`Role modified successfully. Your current role is ${user.role}`, { status: 1 }, user);
 
     } catch (error) {
-        res.status(500).send('Server Error: ', error.message)
+        res.status(500).send(error.message)
     };
 };
+
+
+///////////////////////////////////////////////////////////SETTING LAST CONNECTION
+
+export const setLastConnection = async(req, res) => {
+
+    try {
+        const uId = req.params.uId;
+        const user = await userModel.findById(uId);
+        await user.updateOne({ last_connection: new Date() })
+
+        res.status(200).send()
+    } catch (error) {
+        res.json(error.message)
+    }   
+};
+

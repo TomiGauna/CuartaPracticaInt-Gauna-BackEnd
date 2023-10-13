@@ -63,7 +63,6 @@ const initializePassport = () => {
 
         try {
             const user = await userModel.findOne({ email: username });
-            console.log('passport user: ', user)
             if(!user) return done(null, false, { message: 'User does not exist' });
             if(!isValidPassword(user, password)) return done(null, false);
 
@@ -152,6 +151,7 @@ export const isAdminMiddleware = (req, res, next) => {
   
 export const isUserMiddleware = (req, res, next) => {
     if (req.isAuthenticated() && req.user.role === 'user') {
+        console.log('req.user: ', req.user)
       return next();
     }
     /* console.log(req.user.role) */

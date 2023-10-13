@@ -8,6 +8,7 @@ import cartsRouter from './newRoutes/cartsRouter.js'
 import messagesRouter from './routes/messagesRouter.js'
 import viewsRouter from './routes/viewsRouter.js';
 import sessionsRouter from './newRoutes/sessionsRouter.js';
+import usersRouter from './newRoutes/usersRouter.js';
 import { Server } from "socket.io";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -85,6 +86,7 @@ app.use('/api/products/', prodsRouter);
 app.use('/api/carts/', cartsRouter);
 app.use('/api/messages/', messagesRouter);
 app.use('/api/sessions/', sessionsRouter);
+app.use('/api/users/', usersRouter);
 app.use('/', viewsRouter);
 
 app.use(errorHandler)

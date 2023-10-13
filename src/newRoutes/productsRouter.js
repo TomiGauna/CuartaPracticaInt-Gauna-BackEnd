@@ -11,7 +11,7 @@ router.use(addLogger);
 /* router.get('/', getAllProducts); */
 router.get('/', getProdsBeta);
 router.get('/:pid', getProdById);
-router.post('/', /* isAdminMiddleware, isPremiumMiddleware, */ addProduct);
+router.post('/', isAdminMiddleware, isPremiumMiddleware, addProduct);
 router.put('/:updId', isAdminMiddleware, updateProduct);
 router.delete('/:removedId', isAdminMiddleware, deleteProduct);
 
