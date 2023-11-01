@@ -1,4 +1,4 @@
-import CartsDAO from '../newDaos/cartsDAO.js';
+import CartsDAO from '../daos/cartsDAO.js';
 
 export default class CartsRepository{
     constructor(){

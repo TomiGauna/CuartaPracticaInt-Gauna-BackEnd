@@ -128,8 +128,10 @@ export const deleteCart = async(req, res) => {
 };
 
 export const purchase = async(req, res) => {
-    const cId = req.params.cid;
+    
     try {
+        
+        const cId = req.params.cid;
         const purchaseCartResult = await cartsServ.checkoutCart(cId, req.user.email);
         res.status(201).send({ status: 1, msg: 'Cart successfully purchased', purchaseCartResult: purchaseCartResult });
     } catch (error) {

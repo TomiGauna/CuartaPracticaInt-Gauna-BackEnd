@@ -56,7 +56,8 @@ export const getProdById = async(req, res) => {
             message: 'Fail to get, create, update or delete products'
         });
     };
-}
+};
+
 
 export const addProduct = async(req, res) => {
 

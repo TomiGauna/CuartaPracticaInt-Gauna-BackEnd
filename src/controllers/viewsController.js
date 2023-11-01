@@ -1,5 +1,5 @@
-import ProductManager from "../dao/MongoManagers/MongoProdManager.js";
-import CartManager from "../dao/MongoManagers/MongoCartManager.js";
+import ProductManager from "../MongoManagers/MongoProdManager.js";
+import CartManager from "../MongoManagers/MongoCartManager.js";
 import { generateProd, tokenValidation } from "../utils.js";
 import CustomError from "../errors/customError.js";
 import { generateProdErrorInfo } from "../errors/info.js";
@@ -78,7 +78,7 @@ export const changePswd = (req, res) => {
 };
 
 export const retrievePass = (req, res) => {
-    res.render('passRetrieval', { /* token: req.params.token */ })
+    res.render('passRetrieval', { title: 'Password Retrieval' /* token: req.params.token */ })
 }
 
 const productss = [];

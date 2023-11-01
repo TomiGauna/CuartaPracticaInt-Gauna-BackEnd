@@ -1,4 +1,4 @@
-import ProductsDao from "../newDaos/productsDAO.js";
+import ProductsDao from "../daos/productsDAO.js";
 import ProductsDTO from '../dtos/productsDTO.js';
 
 export default class ProductsRepository{

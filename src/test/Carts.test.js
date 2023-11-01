@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import chai from 'chai';
 import config from "../config/config.js";
-import CartsDao from "../newDaos/cartsDAO.js";
-import ProductsDao from "../newDaos/productsDAO.js";
+import CartsDao from "../daos/cartsDAO.js";
+import ProductsDao from "../daos/productsDAO.js";
 
-mongoose.connect(`${config.mongoUrl}`);
+mongoose.connect(`${process.env.PORT}`);
 const expect = chai.expect;
 
 describe(`Carts' Testing`, () => {

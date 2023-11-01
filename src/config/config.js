@@ -15,5 +15,5 @@ export default{
             pass: process.env.MAIL_AUTH_PASS,
         },
     },
-    baseUrl: 'localhost'
+    baseUrl: process.env.BASE_URL
 }

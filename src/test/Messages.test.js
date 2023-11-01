@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import chai from 'chai';
 import config from "../config/config.js";
-import MessagesDAO from "../newDaos/messagesDAO.js";
+import MessagesDAO from "../daos/messagesDAO.js";
 
-mongoose.connect(`${config.mongoUrl}`);
+mongoose.connect(`${process.env.PORT}`);
 const expect = chai.expect;
 
 describe(`Messages' Testing`, () => {

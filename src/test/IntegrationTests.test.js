@@ -5,7 +5,7 @@ import supertest from "supertest";
 import { createHash } from "../utils.js";
 
 const expect = chai.expect;
-const requester = supertest(`http://localhost:${config.port}`);
+const requester = supertest(`http://localhost:${process.env.PORT}`);
 
 describe('API Testing', () => {
 

@@ -1,10 +1,12 @@
 import CartsRepository from "../repositories/cartRepo.js";
 import { ProductsService } from '../services/productsService.js';
+import TicketsService from "./ticketsService.js";
 
 export default class cartsService{
     constructor(){
         this.repos = new CartsRepository();
         this.prodService = new ProductsService();
+        this.ticketService = new TicketsService();
     };
 
     getAllCarts = async() => {

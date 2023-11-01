@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import chai from 'chai';
 import config from "../config/config.js";
-import ProductsDao from "../newDaos/productsDAO.js";
+import ProductsDao from "../daos/productsDAO.js";
 
 const expect = chai.expect;
-mongoose.connect(`${config.mongoUrl}`);
+mongoose.connect(`${process.env.PORT}`);
 
 /////////////////////////////////////////////////////////////UNIT TESTS
 describe(`Products' Testing`, () => {

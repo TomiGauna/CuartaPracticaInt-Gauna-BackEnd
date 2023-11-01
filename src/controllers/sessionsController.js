@@ -1,4 +1,4 @@
-import userModel from "../dao/models/user.model.js";
+import userModel from "../models/user.model.js";
 import { PRIVATE_KEY, authToken, createHash, generateToken } from '../utils.js';
 import UsersDTO from "../dtos/usersDTO.output.js";
 import { UsersController } from "./usersController.js";
@@ -62,7 +62,7 @@ export const changePassword = async(req, res) => {
     res.send({ status: 'success', message: 'Password modified successfully'});
 };
 
-/////////////////////////////////////////////////////////RETRIVE PASS VIA EMAIL
+/////////////////////////////////////////////////////////RETRIEVE PASS VIA EMAIL
 export const sendingMailToRecover = async(req, res) => {
     let email = req.params.email;
     await usersController.sendEmail(email);

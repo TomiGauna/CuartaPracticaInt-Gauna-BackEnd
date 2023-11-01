@@ -1,15 +1,15 @@
 import { default as token } from 'jsonwebtoken';
 import { PRIVATE_KEY } from '../utils.js';
-import UsersManager from '../dao/MongoManagers/MongoUsersManager.js';
+import UsersManager from '../MongoManagers/MongoUsersManager.js';
 import nodemailer from 'nodemailer';
 import config from '../config/config.js';
 
 const mailConfig = {
-    service: config.mailing.service,
-    port: config.mailing.port,
+    service: process.env.MAIL_SERVICE,
+    port: process.env.MAIL_PORT,
     auth: {
-        user: config.mailing.auth.user,
-        pass: config.mailing.auth.pass
+        user: process.env.MAIL_AUTH_USER,
+        pass: process.env.MAIL_AUTH_PASS
     }
 }
 
@@ -26,12 +26,12 @@ export class UsersController{
         try {
             const jwt = this.createJWT(email)
             transport.sendMail({
-                from: `iTech Store <${config.mailing.auth.user}>`,
+                from: `iTech Store <${process.env.MAIL_AUTH_USER}>`,
                 to: email,
                 subject: 'Password Retrieval',
                 html: `<p>In order to retrieve your password, please click the button below</p>
                 <hr>
-                <button><a href="http://${config.baseUrl}:${config.port}/retrievePass/${jwt}">Retrieve Password</a></button>`
+                <button><a href="http://${process.env.BASE_URL}:${process.env.PORT}/retrievePass/${jwt}">Retrieve Password</a></button>`
             })
         } catch (error) {
             console.log('Fail to send retrieval e-mail: ' + error.message)

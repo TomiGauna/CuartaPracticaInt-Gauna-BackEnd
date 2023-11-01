@@ -34,7 +34,7 @@ router.get('/profile', profile);
 
 router.get('/changePassword', changePswd);
 
-router.get('/retrievePass/:token', /* tokenValidation */ retrievePass);
+router.get('/retrievePass', /* tokenValidation */ retrievePass);
 
 router.get('/mockingproducts', mockingProds);
 

@@ -1,4 +1,4 @@
-import ticketModel from '../dao/models/ticket.model.js';
+import ticketModel from '../models/ticket.model.js';
 
 class TicketsDAO {
     constructor() {

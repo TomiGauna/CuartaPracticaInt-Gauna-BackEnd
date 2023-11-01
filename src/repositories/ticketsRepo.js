@@ -1,4 +1,4 @@
-import TicketsDAO from "../newDaos/ticketsDAO.js";
+import TicketsDAO from "../daos/ticketsDAO.js";
 
 export default class TicketsRepository {
     
